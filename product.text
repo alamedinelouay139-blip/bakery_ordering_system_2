@@ -1,0 +1,143 @@
+3️⃣ MUST Use the Same Architecture (You’re Correct)
+
+You must reuse your existing:
+
+Layered MVC
+
+Service layer
+
+Guards & middleware
+
+Audit logging (recommended)
+
+Swagger documentation
+
+Your doctor wants to see consistency, not new styles.
+
+4️⃣ New Feature to Add: Product Module
+🧱 New Folder Structure (Minimal & Clean)
+src/
+├── models/
+│   └── Product.js
+├── services/
+│   └── product.service.js
+├── controllers/
+│   └── product.controller.js
+├── routes/
+│   └── product.routes.js
+
+
+⚠️ You do not touch auth files.
+You are extending, not modifying.
+
+5️⃣ Database Design — Products Table
+
+This is exactly what your doctor expects:
+
+CREATE TABLE products (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  description TEXT,
+  price DECIMAL(10,2) NOT NULL,
+  stock INT DEFAULT 0,
+  is_active TINYINT(1) DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+Why this is correct:
+
+price → decimal (money)
+
+stock → inventory
+
+is_active → soft control (important concept)
+
+6️⃣ API Endpoints (Full CRUD Plan)
+🔐 Protected Routes (JWT Required)
+Method	Endpoint	Purpose
+POST	/products	Create product
+GET	/products	Get all products
+GET	/products/:id	Get product by ID
+PUT	/products/:id	Update product
+DELETE	/products/:id	Delete product
+
+Middleware chain example:
+
+JWT → active.guard → controller
+
+7️⃣ Responsibility per Layer (VERY IMPORTANT FOR DR)
+📌 Model (Product.js)
+
+SQL queries only
+
+No logic
+
+Examples:
+
+createProduct()
+
+getAllProducts()
+
+getProductById()
+
+updateProduct()
+
+deleteProduct()
+
+📌 Service (product.service.js)
+
+Business logic
+
+Validations
+
+Checks:
+
+Product exists?
+
+Price >= 0?
+
+Stock >= 0?
+
+📌 Controller (product.controller.js)
+
+HTTP only:
+
+req
+
+res
+
+status codes
+
+Calls service methods
+
+Returns JSON
+
+📌 Routes (product.routes.js)
+
+Clean endpoints
+
+Middleware chaining
+
+8️⃣ Swagger (This Gives You BONUS POINTS)
+
+Add:
+
+Product schemas
+
+CRUD endpoints
+
+JWT protection
+
+Your doctor will immediately notice this.
+
+9️⃣ Audit Logs (Optional but VERY STRONG)
+
+Log actions like:
+
+PRODUCT_CREATE
+
+PRODUCT_UPDATE
+
+PRODUCT_DELETE
+//bel response lzm ykubn ande status w bedi aeml return la chi.status.... hek alna al dr 

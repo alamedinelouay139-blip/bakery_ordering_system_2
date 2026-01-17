@@ -28,7 +28,7 @@ const AuthController = {
         return res.status(400).json({ message: "Email and password required" });
       }
 
-      const result = await AuthService.login(email, password);
+const result = await AuthService.login(email, password, req);
 
       res.json(result);
     } catch (err) {
