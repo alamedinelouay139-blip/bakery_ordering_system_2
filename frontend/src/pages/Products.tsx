@@ -30,7 +30,9 @@ const Products: React.FC = () => {
         try {
             setLoading(true);
             const data = await productService.getProducts();
-            setProducts(data);
+            // Filter to only show active products (deleted products have is_active = 0)
+            const activeProducts = data.filter((p: any) => p.is_active === 1 || p.is_active === true);
+            setProducts(activeProducts);
         } catch (err: any) {
             setError('Failed to load products');
             notification.error('Failed to load products');
