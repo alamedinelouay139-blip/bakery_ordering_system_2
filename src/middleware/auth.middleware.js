@@ -1,24 +1,30 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+import UserModel from "../models/User.js";
 
-const authGuard = (req, res, next) => {
+const authGuard = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    // No token sent
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ message: "Token missing" });
     }
 
     const token = authHeader.split(" ")[1];
 
-    // Check if token is valid
-    jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Token exists and is valid → allow
+    const user = await UserModel.getUserById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid token (user not found)" });
+    }
+
+    req.user = user;
     next();
   } catch (err) {
+    console.error("JWT ERROR:", err.message);
     return res.status(401).json({ message: "Invalid token" });
   }
 };
 
-module.exports = authGuard;
+export default authGuard;

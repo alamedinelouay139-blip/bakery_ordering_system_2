@@ -1,6 +1,6 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const AuthController = require("../controllers/auth.controller");
+import AuthController from "../controllers/auth.controller.js";
 
 /**
  * @swagger
@@ -72,4 +72,4 @@ router.post("/login", AuthController.login);
  *         description: Unauthorized
  */
 
-module.exports = router;
+export default router;

@@ -1,44 +1,40 @@
-const pool = require("../config/db");
+import pool from "../config/db.js";
 
 const User = {
   // Create new user
-  create: (name, email, passwordHash) => {
-    return new Promise((resolve, reject) => {
-      const sql = `
-        INSERT INTO users (name, email, password_hash)
-        VALUES (?, ?, ?)
-      `;
+  create: async (name, email, passwordHash) => {
+    const sql = `
+      INSERT INTO users (name, email, password_hash)
+      VALUES (?, ?, ?)
+    `;
 
-      pool.query(sql, [name, email, passwordHash], (err, result) => {
-        if (err) return reject(err);
-        resolve(result);
-      });
-    });
+    const [result] = await pool.query(sql, [name, email, passwordHash]);
+    return result;
   },
 
   // Find user by email (for login)
-  findByEmail: (email) => {
-    return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM users WHERE email = ? LIMIT 1`;
+  findByEmail: async (email) => {
+    const sql = `SELECT * FROM users WHERE email = ? LIMIT 1`;
 
-      pool.query(sql, [email], (err, rows) => {
-        if (err) return reject(err);
-        resolve(rows[0]);
-      });
-    });
+    const [rows] = await pool.query(sql, [email]);
+    return rows[0];
   },
 
   // Find user by id (for JWT)
-  findById: (id) => {
-    return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM users WHERE id = ?`;
+  findById: async (id) => {
+    const sql = `SELECT * FROM users WHERE id = ?`;
 
-      pool.query(sql, [id], (err, rows) => {
-        if (err) return reject(err);
-        resolve(rows[0]);
-      });
-    });
+    const [rows] = await pool.query(sql, [id]);
+    return rows[0];
+  },
+
+  // Alias for backwards compatibility
+  getUserById: async (id) => {
+    const sql = `SELECT * FROM users WHERE id = ?`;
+
+    const [rows] = await pool.query(sql, [id]);
+    return rows[0];
   }
 };
 
-module.exports = User;
+export default User;

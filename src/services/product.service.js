@@ -86,9 +86,7 @@ export const updateProductService = async (id, data) => {
   return affectedRows;
 };
 
-/**
- * Soft delete product
- */
+
 export const deleteProductService = async (id) => {
   const product = await ProductModel.getProductById(id);
 

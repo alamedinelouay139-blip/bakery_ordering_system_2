@@ -1,6 +1,7 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
+import cors from "cors";
 
 // Routes
 import authRoutes from "./routes/auth.routes.js";
@@ -13,6 +14,7 @@ import activeGuard from "./middleware/active.guard.js";
 const app = express();
 
 // Middleware
+app.use(cors()); // Enable CORS for frontend
 app.use(express.json());
 
 // Swagger config

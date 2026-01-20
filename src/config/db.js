@@ -1,5 +1,6 @@
-const mysql = require("mysql");
-require("dotenv").config();
+import mysql from "mysql2/promise";
+import dotenv from "dotenv";
+dotenv.config();
 
 const pool = mysql.createPool({
   connectionLimit: 10,
@@ -10,13 +11,13 @@ const pool = mysql.createPool({
 });
 
 // Test connection
-pool.getConnection((err, connection) => {
-  if (err) {
-    console.error("❌ MySQL connection failed:", err);
-  } else {
+pool.getConnection()
+  .then((connection) => {
     console.log("✅ MySQL connected to bakery_db");
     connection.release();
-  }
-});
+  })
+  .catch((err) => {
+    console.error("❌ MySQL connection failed:", err);
+  });
 
-module.exports = pool;
+export default pool;

@@ -1,4 +1,4 @@
-const AuthService = require("../services/auth.service");
+import AuthService from "../services/auth.service.js";
 
 const AuthController = {
   register: async (req, res) => {
@@ -28,7 +28,7 @@ const AuthController = {
         return res.status(400).json({ message: "Email and password required" });
       }
 
-const result = await AuthService.login(email, password, req);
+      const result = await AuthService.login(email, password, req);
 
       res.json(result);
     } catch (err) {
@@ -37,4 +37,4 @@ const result = await AuthService.login(email, password, req);
   }
 };
 
-module.exports = AuthController;
+export default AuthController;

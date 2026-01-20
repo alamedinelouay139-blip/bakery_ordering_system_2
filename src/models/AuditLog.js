@@ -1,9 +1,9 @@
-const db = require("../config/db");
+import pool from "../config/db.js";
 
-exports.log = async (data) => {
+const log = async (data) => {
   console.log("AUDIT LOG DATA:", data);
 
-  return db.query(
+  const [result] = await pool.query(
     `INSERT INTO audit_logs 
      (user_id, action, target, status, ip_address, user_agent, old_value, new_value)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -18,4 +18,8 @@ exports.log = async (data) => {
       JSON.stringify(data.new)
     ]
   );
+
+  return result;
 };
+
+export default { log };

@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const AuditLog = require("../models/AuditLog");
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+import AuditLog from "../models/AuditLog.js";
 
 const AuthService = {
 
@@ -86,4 +86,4 @@ const AuthService = {
   }
 };
 
-module.exports = AuthService;
+export default AuthService;

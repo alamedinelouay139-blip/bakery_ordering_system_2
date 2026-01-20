@@ -155,7 +155,6 @@ router.post(
   createProduct
 );
 
-// READ all products
 router.get(
   "/",
   authMiddleware,
@@ -163,7 +162,6 @@ router.get(
   getAllProducts
 );
 
-// READ product by id
 router.get(
   "/:id",
   authMiddleware,
@@ -171,7 +169,6 @@ router.get(
   getProductById
 );
 
-// UPDATE product
 router.put(
   "/:id",
   authMiddleware,
@@ -179,7 +176,6 @@ router.put(
   updateProduct
 );
 
-// DELETE product (soft delete)
 router.delete(
   "/:id",
   authMiddleware,
