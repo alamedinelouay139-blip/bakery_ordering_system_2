@@ -171,7 +171,7 @@ const Products: React.FC = () => {
                                 <tr key={product.id}>
                                     <td>{product.name}</td>
                                     <td>{product.description || '-'}</td>
-                                    <td>${product.price.toFixed(2)}</td>
+                                    <td>${Number(product.price).toFixed(2)}</td>
                                     <td>{product.stock}</td>
                                     <td>
                                         {product.is_active ? (
