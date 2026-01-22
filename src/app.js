@@ -51,7 +51,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/products", productRoutes);
+app.use("/api/products", productRoutes);
 app.use("/api/audit-logs", auditRoutes);
 
 // 🔒 Example protected routes
