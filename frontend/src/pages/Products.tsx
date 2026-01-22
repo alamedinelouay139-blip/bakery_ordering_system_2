@@ -18,6 +18,8 @@ const Products: React.FC = () => {
         stock: 0,
         is_active: 1,
     });
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [productToDelete, setProductToDelete] = useState<number | null>(null);
 
     const notification = useNotification();
     const { showLoading, hideLoading } = useLoading();
@@ -80,18 +82,26 @@ const Products: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: number) => {
-        if (window.confirm('Are you sure you want to delete this product?')) {
-            try {
-                showLoading('Deleting product...');
-                await productService.deleteProduct(id);
-                notification.success('Product deleted successfully');
-                await loadProducts();
-            } catch (err: any) {
-                notification.error('Failed to delete product');
-            } finally {
-                hideLoading();
-            }
+    const confirmDelete = (id: number) => {
+        setProductToDelete(id);
+        setShowDeleteModal(true);
+    };
+
+    const handleDelete = async () => {
+        if (!productToDelete) return;
+
+        try {
+            showLoading('Deleting product...');
+            await productService.deleteProduct(productToDelete);
+            notification.success('Product deleted successfully');
+            await loadProducts();
+            setShowDeleteModal(false);
+            setProductToDelete(null);
+        } catch (err: any) {
+            console.error("Delete error:", err);
+            notification.error('Failed to delete product: ' + (err.response?.data?.message || err.message));
+        } finally {
+            hideLoading();
         }
     };
 
@@ -216,7 +226,7 @@ const Products: React.FC = () => {
                                         ✏️ Edit
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(product.id)}
+                                        onClick={() => confirmDelete(product.id)}
                                         className="btn btn-sm btn-danger"
                                         style={{ flex: 1 }}
                                     >
@@ -323,6 +333,42 @@ const Products: React.FC = () => {
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                )}
+
+                {/* Delete Confirmation Modal */}
+                {showDeleteModal && (
+                    <div className="modal active">
+                        <div className="modal-content" style={{ maxWidth: '400px' }}>
+                            <div className="modal-header">
+                                <h2 style={{ color: 'var(--error-color)' }}>🗑️ Confirm Delete</h2>
+                                <button
+                                    className="modal-close"
+                                    onClick={() => setShowDeleteModal(false)}
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                            <div className="p-4">
+                                <p>Are you sure you want to delete this product? This action cannot be undone.</p>
+                            </div>
+                            <div className="flex gap-2 p-4">
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowDeleteModal(false)}
+                                    style={{ flex: 1 }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={handleDelete}
+                                    style={{ flex: 1 }}
+                                >
+                                    Yes, Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
