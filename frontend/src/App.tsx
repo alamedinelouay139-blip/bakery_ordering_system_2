@@ -7,7 +7,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Toast from './components/Toast';
 import LoadingOverlay from './components/LoadingOverlay';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Products from './pages/Products';
+import AuditLogs from './pages/AuditLogs';
 
 const App: React.FC = () => {
     return (
@@ -17,11 +19,20 @@ const App: React.FC = () => {
                     <BrowserRouter>
                         <Routes>
                             <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
                             <Route
                                 path="/products"
                                 element={
                                     <ProtectedRoute>
                                         <Products />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/audit-logs"
+                                element={
+                                    <ProtectedRoute>
+                                        <AuditLogs />
                                     </ProtectedRoute>
                                 }
                             />
@@ -37,3 +48,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

@@ -22,6 +22,22 @@ const Products: React.FC = () => {
     const notification = useNotification();
     const { showLoading, hideLoading } = useLoading();
 
+    // Product icons mapping
+    const getProductIcon = (name: string) => {
+        const lowerName = name.toLowerCase();
+        if (lowerName.includes('croissant')) return '🥐';
+        if (lowerName.includes('bread') || lowerName.includes('baguette')) return '🥖';
+        if (lowerName.includes('cake')) return '🍰';
+        if (lowerName.includes('donut') || lowerName.includes('doughnut')) return '🍩';
+        if (lowerName.includes('cookie')) return '🍪';
+        if (lowerName.includes('cupcake')) return '🧁';
+        if (lowerName.includes('pie')) return '🥧';
+        if (lowerName.includes('pretzel')) return '🥨';
+        if (lowerName.includes('bagel')) return '🥯';
+        if (lowerName.includes('muffin')) return '🧁';
+        return '🍞'; // default bread icon
+    };
+
     useEffect(() => {
         loadProducts();
     }, []);
@@ -30,7 +46,6 @@ const Products: React.FC = () => {
         try {
             setLoading(true);
             const data = await productService.getProducts();
-            // Filter to only show active products (deleted products have is_active = 0)
             const activeProducts = data.filter((p: any) => p.is_active === 1 || p.is_active === true);
             setProducts(activeProducts);
         } catch (err: any) {
@@ -130,9 +145,9 @@ const Products: React.FC = () => {
             <Navbar />
             <div className="container">
                 <div className="flex-between mb-3">
-                    <div>
-                        <h1>Product Management</h1>
-                        <p className="text-secondary">Manage your bakery products</p>
+                    <div className="page-header">
+                        <h1>🥐 Product Management</h1>
+                        <p className="text-secondary">Manage your delicious bakery products</p>
                     </div>
                     <button onClick={handleAdd} className="btn btn-primary">
                         <span>➕</span>
@@ -148,60 +163,69 @@ const Products: React.FC = () => {
                 )}
 
                 {products.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-                        <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🥖</div>
+                    <div className="empty-state">
+                        <div className="empty-state-icon">🥖</div>
                         <h2>No Products Yet</h2>
-                        <p className="text-secondary mb-3">Start by adding your first product</p>
+                        <p className="text-secondary mb-3">Start by adding your first delicious product</p>
                         <button onClick={handleAdd} className="btn btn-primary">
                             Add Your First Product
                         </button>
                     </div>
                 ) : (
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th>Stock</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {products.map((product) => (
-                                <tr key={product.id}>
-                                    <td>{product.name}</td>
-                                    <td>{product.description || '-'}</td>
-                                    <td>${Number(product.price).toFixed(2)}</td>
-                                    <td>{product.stock}</td>
-                                    <td>
+                    <div className="products-grid">
+                        {products.map((product) => (
+                            <div key={product.id} className="product-card">
+                                <div className="product-icon">{getProductIcon(product.name)}</div>
+
+                                <div className="product-name">{product.name}</div>
+
+                                <div className="product-description">
+                                    {product.description || 'No description available'}
+                                </div>
+
+                                <div className="product-details">
+                                    <div>
+                                        <div className="product-price">${Number(product.price).toFixed(2)}</div>
+                                        <div className="product-stock">
+                                            {product.stock > 0 ? (
+                                                <span style={{ color: 'var(--success-color)' }}>
+                                                    ✓ {product.stock} in stock
+                                                </span>
+                                            ) : (
+                                                <span style={{ color: 'var(--error-color)' }}>
+                                                    Out of stock
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div>
                                         {product.is_active ? (
                                             <span className="badge badge-success">Active</span>
                                         ) : (
                                             <span className="badge badge-danger">Inactive</span>
                                         )}
-                                    </td>
-                                    <td>
-                                        <div className="action-buttons">
-                                            <button
-                                                onClick={() => handleEdit(product)}
-                                                className="btn btn-sm btn-secondary"
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(product.id)}
-                                                className="btn btn-sm btn-danger"
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                    </div>
+                                </div>
+
+                                <div className="product-actions">
+                                    <button
+                                        onClick={() => handleEdit(product)}
+                                        className="btn btn-sm btn-secondary"
+                                        style={{ flex: 1 }}
+                                    >
+                                        ✏️ Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(product.id)}
+                                        className="btn btn-sm btn-danger"
+                                        style={{ flex: 1 }}
+                                    >
+                                        🗑️ Delete
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 )}
 
                 {/* Modal */}
@@ -209,7 +233,7 @@ const Products: React.FC = () => {
                     <div className="modal active">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h2>{editingProduct ? 'Edit Product' : 'Add Product'}</h2>
+                                <h2>{editingProduct ? '✏️ Edit Product' : '➕ Add Product'}</h2>
                                 <button
                                     className="modal-close"
                                     onClick={() => setShowModal(false)}
@@ -295,7 +319,7 @@ const Products: React.FC = () => {
                                         Cancel
                                     </button>
                                     <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
-                                        Save Product
+                                        {editingProduct ? '💾 Update Product' : '➕ Save Product'}
                                     </button>
                                 </div>
                             </form>

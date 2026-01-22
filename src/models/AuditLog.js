@@ -22,4 +22,15 @@ const log = async (data) => {
   return result;
 };
 
-export default { log };
+const getAll = async () => {
+  const [rows] = await pool.query(
+    `SELECT al.*, u.name as user_name, u.email as user_email
+     FROM audit_logs al
+     LEFT JOIN users u ON al.user_id = u.id
+     ORDER BY al.created_at DESC
+     LIMIT 100`
+  );
+  return rows;
+};
+
+export default { log, getAll };

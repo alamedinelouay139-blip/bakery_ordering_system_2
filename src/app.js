@@ -6,6 +6,7 @@ import cors from "cors";
 // Routes
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
+import auditRoutes from "./routes/audit.routes.js";
 
 // Middleware
 import authMiddleware from "./middleware/auth.middleware.js";
@@ -51,6 +52,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/products", productRoutes);
+app.use("/api/audit-logs", auditRoutes);
 
 // 🔒 Example protected routes
 app.get(

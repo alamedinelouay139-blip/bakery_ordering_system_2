@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { useNotification } from '../contexts/NotificationContext';
 import { useLoading } from '../contexts/LoadingContext';
+import { authService } from '../services/auth.service';
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
 
-    const { login } = useAuth();
     const navigate = useNavigate();
     const notification = useNotification();
     const { showLoading, hideLoading } = useLoading();
@@ -18,13 +19,27 @@ const Login: React.FC = () => {
         e.preventDefault();
         setError('');
 
+        // Validate passwords match
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            notification.error('Passwords do not match');
+            return;
+        }
+
+        // Validate password length
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters');
+            notification.error('Password must be at least 6 characters');
+            return;
+        }
+
         try {
-            showLoading('Signing in...');
-            await login(email, password);
-            notification.success('Welcome back! Login successful');
-            navigate('/products');
+            showLoading('Creating your account...');
+            await authService.register({ name, email, password });
+            notification.success('Account created successfully! Please login.');
+            navigate('/login');
         } catch (err: any) {
-            const errorMessage = err.response?.data?.message || 'Login failed. Please try again.';
+            const errorMessage = err.response?.data?.message || 'Registration failed. Please try again.';
             setError(errorMessage);
             notification.error(errorMessage);
         } finally {
@@ -37,7 +52,7 @@ const Login: React.FC = () => {
             <div className="card auth-card">
                 <div className="text-center mb-3">
                     <div className="logo mb-2">🥐 Bakery Admin</div>
-                    <p className="text-secondary">Sign in to manage your products</p>
+                    <p className="text-secondary">Create your account</p>
                 </div>
 
                 {error && (
@@ -48,6 +63,19 @@ const Login: React.FC = () => {
                 )}
 
                 <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="name">Full Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="John Doe"
+                            required
+                            autoComplete="name"
+                        />
+                    </div>
+
                     <div className="form-group">
                         <label htmlFor="email">Email Address</label>
                         <input
@@ -68,9 +96,22 @@ const Login: React.FC = () => {
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
+                            placeholder="At least 6 characters"
                             required
-                            autoComplete="current-password"
+                            autoComplete="new-password"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="confirmPassword">Confirm Password</label>
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm your password"
+                            required
+                            autoComplete="new-password"
                         />
                     </div>
 
@@ -78,15 +119,15 @@ const Login: React.FC = () => {
                         type="submit"
                         className="btn btn-primary btn-block"
                     >
-                        Sign In
+                        Create Account
                     </button>
                 </form>
 
                 <div className="text-center mt-3">
                     <p className="text-secondary">
-                        Don't have an account?{' '}
-                        <Link to="/register" className="link">
-                            Sign up
+                        Already have an account?{' '}
+                        <Link to="/login" className="link">
+                            Sign in
                         </Link>
                     </p>
                 </div>
@@ -95,4 +136,4 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
+export default Register;

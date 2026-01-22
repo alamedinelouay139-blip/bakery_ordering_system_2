@@ -2,10 +2,10 @@ import React from 'react';
 import { useNotification, Notification } from '../contexts/NotificationContext';
 
 const icons: Record<string, string> = {
-    success: '✓',
-    error: '✕',
-    warning: '⚠',
-    info: 'ℹ',
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    info: 'ℹ️',
 };
 
 const ToastItem: React.FC<{ notification: Notification; onClose: () => void }> = ({
