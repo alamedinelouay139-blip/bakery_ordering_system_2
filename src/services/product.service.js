@@ -8,7 +8,7 @@ Decide when to create / update / delete
 
 Call the Product Model */
 import * as ProductModel from "../models/Product.js";
-
+//htyna as laan product model fi create w get w uodate ...
 /**
  * Create product
  */
@@ -30,7 +30,7 @@ export const createProductService = async (data, userId) => {
 
   // Attach creator
   const productId = await ProductModel.createProduct({
-    ...data,
+    ...data,//tlat n2at fiya ktr data price w stock...
     created_by: userId,
   });
 
@@ -71,12 +71,13 @@ export const updateProductService = async (id, data) => {
     throw new Error("Price cannot be negative");
   }
 
-  if (data.stock !== undefined && data.stock < 0) {
+  if (data.stock !== undefined && data.stock < 0) {//undefined ymkn al user ma yb3at price 
     throw new Error("Stock cannot be negative");
   }
 
   const affectedRows = await ProductModel.updateProduct(id, {
-    name: data.name ?? product.name,
+    name: data.name ?? product.name,//3almt al esfhme esma nullish coelescing
+    //ya3ni iza data.name mawjud khdy iza mnu mawjud khod al adim 
     description: data.description ?? product.description,
     price: data.price ?? product.price,
     stock: data.stock ?? product.stock,

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom/client';//btrbot reat bl browser
 import App from './App.tsx';
 import './index.css';
 

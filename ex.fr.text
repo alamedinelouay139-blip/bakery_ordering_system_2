@@ -1,0 +1,62 @@
+connect al front ma3 al back
+awl shi al rabet baynton mnu bl route wala bl controler 
+al raebt a; ha2i2i bayynton huwi JWT and Http headers 
+front en bykhod input mn al user 
+ba3da byb3at req 
+w bysta2bl 
+w by3rod natije
+1-kif btsur al 3amaloye kela?awal shi btftah sf7et login page login 
+->ba3da btftah (POST http://localhost:5000/api/auth/login
+)->ba3da byt3bu bl body yali huwi al req.body({
+  "email": "...",
+  "password": "..."
+}
+)ba3da->backend yraje3 token mabyf7as esa wala bya3ml shi bas biwaled JWT
+->ba3da frontend bi5azen al token blocal storage
+->ba3da hon sar al rabet al 7a2i2i wli huwi 
+->bal token sar mnl backend al front maby2dar ykhl2u lahalu lh local laan bysma7 bl refresh w bysma7 tst3mlu kza mara 
+ba3da teni n2ta->ba3da nrbtu bi AXIOS hyda aleb al rabet baynton 
+->src/api/axios.ts->
+const api = axios.create({
+  baseURL: ttp://localhost:5000",
+});
+->hyda al code 3am n5la2 api al rabet atyne al url hatta ba3dn kel mara mnsta3ml
+hyda al api mnktob example ->api.get("/api/products")
+fa huwi teka2iyan 7ayru7 3ala http://localhost:5000/api/products
+
+ba3da aham shi hyda l sater->api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+ hdya al code awl shi 3am yt7a2a2 mnu iza fi token aw la iza fi bhtu bl headers
+ lesh bhtu bl header laan backend maby3rf shi 3an reacct bya3rf header 
+ bya3rf (req.headers.authorization)
+ front ba3at token ba3da back bifku ba3da 3rf al user sar al connection 
+
+
+
+
+ bas tfta7 frontendbymshi hk->
+ main.tsx
+ → App.tsx
+   → AuthContext
+   → Routes
+     → Login / Register
+     → ProtectedRoute
+       → Pages (Products, etc.)
+         → Services
+           → Axios
+             → Backend
+awal file byshtghl huwi main.tsx waziftu ykhod react app w yzra3u bl browser 
+ba3da authcontext huwi al 3a2el taba3 frontend ->waziftuenu ya3rf al user msajal?
+fi token? bisherek al ma3lume ma3 kel al pages localStorage.getItem("token")
+aythcontext mab7ki backend bas byf7as token 
+
+halaa yali bsir ba yaml login.tsx auth.service.login(data)
+->ya3ni page bta3ml call lal service wl auth service yali by7ki ma3 al backend 
+fa alaxios byshtghl bas servise y3mli call

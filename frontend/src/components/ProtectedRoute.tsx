@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();//al is authenticated mn al authcontext
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;

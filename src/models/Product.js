@@ -16,10 +16,11 @@ export const createProduct = async ({
     VALUES
       (?, ?, ?, ?, ?, ?)
     `,
+    //3almt al estfhem hatanmna3 sql attack injection
     [name, description, price, stock, is_active, created_by]
   );
 
-  return result.insertId;
+  return result.insertId;//yrj3 id jdid
 };
 
 /**
@@ -35,12 +36,15 @@ export const getAllProducts = async () => {
 /**
  * READ single product by id
  */
+
+
+
 export const getProductById = async (id) => {
   const [rows] = await pool.query(
     `SELECT * FROM products WHERE id = ?`,
     [id]
   );
-  return rows[0] || null;
+  return rows[0] || null;//r0 laan al id unique 
 };
 
 /**
@@ -67,7 +71,7 @@ export const updateProduct = async (id, {
     [name, description, price, stock, is_active, id]
   );
 
-  return result.affectedRows;
+  return result.affectedRows;//afective row byaetine 0 aw 1 w  0 iza mfi
 };
 
 /**

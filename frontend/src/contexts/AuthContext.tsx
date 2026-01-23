@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User } from '../types';
 import { authService } from '../services/auth.service';
 
-interface AuthContextType {
+interface AuthContextType {//hyda 3a2ed am yuul shu am waferlna al authcontext
     user: User | null;
     token: string | null;
     isAuthenticated: boolean;
